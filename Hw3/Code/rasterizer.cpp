@@ -278,11 +278,12 @@ void rst::rasterizer::rasterize_triangle(const Triangle &t, const std::array<Eig
     // Use: Instead of passing the triangle's color directly to the frame buffer, pass the color to the shaders first to get the final color;
     // Use: auto pixel_color = fragment_shader(payload);
 
-    auto v = t.toVector4();
     double l = std::min(std::min(t.v[0].x(), t.v[1].x()), t.v[2].x());
     double r = std::max(std::max(t.v[0].x(), t.v[1].x()), t.v[2].x());
     double u = std::max(std::max(t.v[0].y(), t.v[1].y()), t.v[2].y());
     double b = std::min(std::min(t.v[0].y(), t.v[1].y()), t.v[2].y());
+
+    auto v = t.toVector4();
 
     for (int x = l; x <= r; x++)
     {
@@ -304,7 +305,7 @@ void rst::rasterizer::rasterize_triangle(const Triangle &t, const std::array<Eig
                     auto interpolated_color = interpolate(alpha, beta, gamma, t.color[0], t.color[1], t.color[2], 1);
                     auto interpolated_normal = interpolate(alpha, beta, gamma, t.normal[0], t.normal[1], t.normal[2], 1);
                     auto interpolated_texcoords = interpolate(alpha, beta, gamma, t.tex_coords[0], t.tex_coords[1], t.tex_coords[2], 1);
-                    auto interpolated_shadingcoords = interpolate(alpha, beta, gamma, view_pos[0], view_pos[1], view_pos[2]);
+                    auto interpolated_shadingcoords = interpolate(alpha, beta, gamma, view_pos[0], view_pos[1], view_pos[2], 1);
                     fragment_shader_payload payload(interpolated_color, interpolated_normal.normalized(), interpolated_texcoords, texture ? &*texture : nullptr);
                     payload.view_pos = interpolated_shadingcoords;
                     auto pixel_color = fragment_shader(payload);
