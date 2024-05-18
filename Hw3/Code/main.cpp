@@ -1,6 +1,6 @@
 #include <iostream>
 #include <opencv2/opencv.hpp>
-
+#include <cmath>
 #include "global.hpp"
 #include "rasterizer.hpp"
 #include "Triangle.hpp"
@@ -152,15 +152,15 @@ Eigen::Vector3f texture_fragment_shader(const fragment_shader_payload &payload)
 
 Eigen::Vector3f phong_fragment_shader(const fragment_shader_payload &payload)
 {
-    Eigen::Vector3f ka = Eigen::Vector3f(0.005, 0.005, 0.005);
-    Eigen::Vector3f kd = payload.color;
+    Eigen::Vector3f ka = Eigen::Vector3f(0.005, 0.005, 0.005); // 漫反射系数
+    Eigen::Vector3f kd = payload.color;                        // 纹理颜色
     Eigen::Vector3f ks = Eigen::Vector3f(0.7937, 0.7937, 0.7937);
 
     auto l1 = light{{20, 20, 20}, {500, 500, 500}};
     auto l2 = light{{-20, 20, 0}, {500, 500, 500}};
 
     std::vector<light> lights = {l1, l2};
-    Eigen::Vector3f amb_light_intensity{10, 10, 10};
+    Eigen::Vector3f amb_light_intensity{10, 10, 10}; // 环境光强
     Eigen::Vector3f eye_pos{0, 0, 10};
 
     float p = 150;
@@ -174,6 +174,14 @@ Eigen::Vector3f phong_fragment_shader(const fragment_shader_payload &payload)
     {
         // TODO: For each light source in the code, calculate what the *ambient*, *diffuse*, and *specular*
         // components are. Then, accumulate that result on the *result_color* object.
+        auto v = eye_pos - point;        // 反射光
+        auto l = light.position - point; // 入射光
+        auto h = (v + l).normalized();   // 半程向量
+        auto r = l.dot(l);
+        auto ambient = ka.cwiseProduct(amb_light_intensity); // 环境光
+        auto diffuse = kd.cwiseProduct(light.intensity / r) * std::max(.0f, normal.normalized().dot(l.normalized()));
+        auto specular = ks.cwiseProduct(light.intensity / r) * std::pow(std::max(.0f, normal.normalized().dot(h.normalized())), p);
+        result_color += (ambient + diffuse + specular);
     }
 
     return result_color * 255.f;
