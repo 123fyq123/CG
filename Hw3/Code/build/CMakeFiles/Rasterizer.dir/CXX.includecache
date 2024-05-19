@@ -6,6 +6,18 @@
 
 #IncludeRegexTransform: 
 
+/usr/games/CG/Hw3/Code/OBJ_Loader.h
+iostream
+-
+vector
+-
+string
+-
+fstream
+-
+math.h
+-
+
 /usr/games/CG/Hw3/Code/Shader.hpp
 eigen3/Eigen/Eigen
 -
@@ -28,15 +40,25 @@ Texture.hpp
 
 /usr/games/CG/Hw3/Code/global.hpp
 
-/usr/games/CG/Hw3/Code/rasterizer.cpp
-algorithm
+/usr/games/CG/Hw3/Code/main.cpp
+iostream
 -
-rasterizer.hpp
-/usr/games/CG/Hw3/Code/rasterizer.hpp
 opencv2/opencv.hpp
 -
-math.h
+cmath
 -
+global.hpp
+/usr/games/CG/Hw3/Code/global.hpp
+rasterizer.hpp
+/usr/games/CG/Hw3/Code/rasterizer.hpp
+Triangle.hpp
+/usr/games/CG/Hw3/Code/Triangle.hpp
+Shader.hpp
+/usr/games/CG/Hw3/Code/Shader.hpp
+Texture.hpp
+/usr/games/CG/Hw3/Code/Texture.hpp
+OBJ_Loader.h
+/usr/games/CG/Hw3/Code/OBJ_Loader.h
 
 /usr/games/CG/Hw3/Code/rasterizer.hpp
 eigen3/Eigen/Eigen

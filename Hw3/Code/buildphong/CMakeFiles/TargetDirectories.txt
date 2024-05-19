@@ -1,3 +1,0 @@
-/usr/games/CG/Hw3/Code/buildphong/CMakeFiles/rebuild_cache.dir
-/usr/games/CG/Hw3/Code/buildphong/CMakeFiles/edit_cache.dir
-/usr/games/CG/Hw3/Code/buildphong/CMakeFiles/Rasterizer.dir
