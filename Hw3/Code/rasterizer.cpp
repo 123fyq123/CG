@@ -182,6 +182,7 @@ void rst::rasterizer::draw(std::vector<Triangle *> &TriangleList)
     {
         Triangle newtri = *t;
 
+        // 转到View Space
         std::array<Eigen::Vector4f, 3> mm{
             (view * model * t->v[0]),
             (view * model * t->v[1]),
@@ -190,7 +191,9 @@ void rst::rasterizer::draw(std::vector<Triangle *> &TriangleList)
         std::array<Eigen::Vector3f, 3> viewspace_pos;
 
         std::transform(mm.begin(), mm.end(), viewspace_pos.begin(), [](auto &v)
-                       { return v.template head<3>(); });
+                       { return v.template head<3>(); }); // 获得ViewSpace坐标
+
+        // Screen Space
 
         Eigen::Vector4f v[] = {
             mvp * t->v[0],
@@ -292,14 +295,15 @@ void rst::rasterizer::rasterize_triangle(const Triangle &t, const std::array<Eig
         {
             if (insideTriangle(x + 0.5, y + 0.5, t.v))
             {
-                int index = get_index(x, y);
-                auto [alpha, beta, gamma] = computeBarycentric2D(x, y, t.v);
+                int index = get_index(x, y);                                 // 像素坐标
+                auto [alpha, beta, gamma] = computeBarycentric2D(x, y, t.v); // 获取重心坐标
                 float Z = 1.0 / (alpha / v[0].w() + beta / v[1].w() + gamma / v[2].w());
                 float zp = alpha * v[0].z() / v[0].w() + beta * v[1].z() / v[1].w() + gamma * v[2].z() / v[2].w();
                 zp *= Z;
                 float w_reciprocal = 1.0 / (alpha / v[0].w() + beta / v[1].w() + gamma / v[2].w());
                 float z_interpolated = alpha * v[0].z() / v[0].w() + beta * v[1].z() / v[1].w() + gamma * v[2].z() / v[2].w();
                 z_interpolated *= w_reciprocal;
+                // 深度测试
                 if (depth_buf[index] > z_interpolated)
                 {
                     Eigen::Vector2i p = {float(x), float(y)};

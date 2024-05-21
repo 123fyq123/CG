@@ -136,7 +136,7 @@ Eigen::Vector3f texture_fragment_shader(const fragment_shader_payload &payload)
     float p = 150;
 
     Eigen::Vector3f color = texture_color;
-    Eigen::Vector3f point = payload.view_pos;
+    Eigen::Vector3f point = payload.view_pos; // 光照作用点
     Eigen::Vector3f normal = payload.normal;
 
     Eigen::Vector3f result_color = {0, 0, 0};
@@ -149,9 +149,9 @@ Eigen::Vector3f texture_fragment_shader(const fragment_shader_payload &payload)
         auto l = light.position - point; // 入射光
         auto h = (v + l).normalized();   // 半程向量
         auto r = l.dot(l);
-        auto ambient = ka.cwiseProduct(amb_light_intensity); // 环境光
-        auto diffuse = kd.cwiseProduct(light.intensity / r) * std::max(.0f, normal.normalized().dot(l.normalized()));
-        auto specular = ks.cwiseProduct(light.intensity / r) * std::pow(std::max(.0f, normal.normalized().dot(h.normalized())), p);
+        auto ambient = ka.cwiseProduct(amb_light_intensity);                                                                        // 环境光
+        auto diffuse = kd.cwiseProduct(light.intensity / r) * std::max(.0f, normal.normalized().dot(l.normalized()));               // 漫反射
+        auto specular = ks.cwiseProduct(light.intensity / r) * std::pow(std::max(.0f, normal.normalized().dot(h.normalized())), p); // 高光
         result_color += (ambient + diffuse + specular);
     }
 
