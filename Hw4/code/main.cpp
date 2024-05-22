@@ -70,6 +70,43 @@ void bezier(const std::vector<cv::Point2f> &control_points, cv::Mat &window)
     }
 }
 
+void bezier2(const std::vector<cv::Point2f> &control_points, cv::Mat &window)
+{
+    // TODO: Iterate through all t = 0 to t = 1 with small steps, and call de Casteljau's
+    // recursive Bezier algorithm.
+
+    // 反走样
+    for (double t = 0; t <= 1.0; t += 0.0001)
+    {
+        auto p = recursive_bezier(control_points, t);
+        window.at<cv::Vec3b>(p.y, p.x)[1] = 255;
+        float dx = p.x - std::floor(p.x);
+        float dy = p.y - std::floor(p.y);
+        float kx = dx < 0.5f ? -1.0 : 1.0;
+        float ky = dy < 0.5f ? -1.0 : 1.0;
+        auto p0 = cv::Point2f(std::floor(p.x) + 0.5f, std::floor(p.y) + 0.5f);
+        auto p1 = cv::Point2f(std::floor(p.x + kx * 1.0f) + 0.5f, std::floor(p.y) + 0.5f);
+        auto p2 = cv::Point2f(std::floor(p.x) + 0.5f, std::floor(p.y + ky * 1.0) + 0.5f);
+        auto p3 = cv::Point2f(std::floor(p.x + kx * 1.0f) + 0.5f, std::floor(p.y + ky * 1.0) + 0.5f);
+
+        std::vector<cv::Point2f> points;
+        // points.push_back(p0);
+        points.push_back(p1);
+        points.push_back(p2);
+        points.push_back(p3);
+
+        float d0 = std::sqrt(std::pow(p.x - p0.x, 2) + std::pow(p.y - p0.y, 2));
+        for (auto &point : points)
+        {
+            auto d = std::sqrt(std::pow(point.x - p.x, 2) + std::pow(point.y - p.y, 2));
+            auto ratio = d0 / d;
+            auto color = window.at<cv::Vec3b>(point.y, point.x)[1];
+            color = std::fmax(color, ratio * 255.0);
+            window.at<cv::Vec3b>(point.y, point.x)[1] = (int)color;
+        }
+    }
+}
+
 int main()
 {
     cv::Mat window = cv::Mat(700, 700, CV_8UC3, cv::Scalar(0));
@@ -89,7 +126,7 @@ int main()
         if (control_points.size() == 4)
         {
             // naive_bezier(control_points, window);
-            bezier(control_points, window);
+            bezier2(control_points, window);
 
             cv::imshow("Bezier Curve", window);
             cv::imwrite("my_bezier_curve.png", window);
