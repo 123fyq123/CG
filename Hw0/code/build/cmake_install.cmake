@@ -1,4 +1,4 @@
-# Install script for directory: /usr/games/CG/Hw0/Assignment  0/code
+# Install script for directory: /usr/games/CG/Hw0/code
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/usr/games/CG/Hw0/Assignment  0/code/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/usr/games/CG/Hw0/code/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

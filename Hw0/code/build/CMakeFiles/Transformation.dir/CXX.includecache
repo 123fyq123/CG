@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/usr/games/CG/Hw0/Assignment  0/code/main.cpp
+/usr/games/CG/Hw0/code/main.cpp
 cmath
 -
 eigen3/Eigen/Core

@@ -6,5 +6,5 @@ CXX_FLAGS =
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I"/usr/games/CG/Hw0/Assignment  0/code/EIGEN3_INCLUDE_DIR" 
+CXX_INCLUDES = -I/usr/games/CG/Hw0/code/EIGEN3_INCLUDE_DIR 
 

@@ -2,7 +2,7 @@
 #include "rasterizer.hpp"
 #include <eigen3/Eigen/Eigen>
 #include <iostream>
-#include<cmath>
+#include <cmath>
 #include <opencv2/opencv.hpp>
 constexpr double MY_PI = 3.1415926;
 
@@ -28,11 +28,11 @@ Eigen::Matrix4f get_model_matrix(float rotation_angle)
     // Then return it.
     double theta = rotation_angle / 180 * MY_PI;
     Eigen::MatrixXf m1(4, 4);
-    m1 <<   cos(theta), -sin(theta), 0, 0,
-            sin(theta), cos(theta), 0, 0, 
-            0, 0, 1, 0, 
-            0, 0, 0, 1;
-    
+    m1 << cos(theta), -sin(theta), 0, 0,
+        sin(theta), cos(theta), 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1;
+
     model = m1 * model;
     return model;
 }
@@ -54,39 +54,41 @@ Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio,
     double l = -1.0 * r;
 
     Eigen::MatrixXf m1(4, 4); // 规范化
-    m1 <<   2.0 / (r - l) , 0, 0, 0,
-            0, 2.0 / (t - b), 0, 0,
-            0, 0, 2.0 / (zNear - zFar), 0, 
-            0, 0, 0, 1;
+    m1 << 2.0 / (r - l), 0, 0, 0,
+        0, 2.0 / (t - b), 0, 0,
+        0, 0, 2.0 / (zNear - zFar), 0,
+        0, 0, 0, 1;
 
     Eigen::MatrixXf m2(4, 4); // 移到原点
-    m2 <<   1, 0, 0, -(r + l) / 2.0,
-            0, 1, 0, -(t + b) / 2.0, 
-            0, 0, 1, -(zNear + zFar) / 2.0,
-            0, 0, 0, 1;
+    m2 << 1, 0, 0, -(r + l) / 2.0,
+        0, 1, 0, -(t + b) / 2.0,
+        0, 0, 1, -(zNear + zFar) / 2.0,
+        0, 0, 0, 1;
 
     Eigen::MatrixXf m3(4, 4); // 透视投影
 
-    m3 <<   zNear, 0, 0, 0, 
-            0, zNear, 0, 0,
-            0, 0, zNear + zFar, -zNear * zFar,
-            0, 0, 1, 0;
+    m3 << zNear, 0, 0, 0,
+        0, zNear, 0, 0,
+        0, 0, zNear + zFar, -zNear * zFar,
+        0, 0, 1, 0;
 
     projection = m1 * m2 * m3 * projection;
 
     return projection;
 }
 
-int main(int argc, const char** argv)
+int main(int argc, const char **argv)
 {
     float angle = 0;
     bool command_line = false;
     std::string filename = "output.png";
 
-    if (argc >= 3) {
+    if (argc >= 3)
+    {
         command_line = true;
         angle = std::stof(argv[2]); // -r by default
-        if (argc == 4) {
+        if (argc == 4)
+        {
             filename = std::string(argv[3]);
         }
     }
@@ -105,7 +107,8 @@ int main(int argc, const char** argv)
     int key = 0;
     int frame_count = 0;
 
-    if (command_line) {
+    if (command_line)
+    {
         r.clear(rst::Buffers::Color | rst::Buffers::Depth);
 
         r.set_model(get_model_matrix(angle));
@@ -121,7 +124,8 @@ int main(int argc, const char** argv)
         return 0;
     }
 
-    while (key != 27) {
+    while (key != 27)
+    {
         r.clear(rst::Buffers::Color | rst::Buffers::Depth);
 
         r.set_model(get_model_matrix(angle));
@@ -137,10 +141,12 @@ int main(int argc, const char** argv)
 
         std::cout << "frame count: " << frame_count++ << '\n';
 
-        if (key == 'a') {
+        if (key == 'a')
+        {
             angle += 10;
         }
-        else if (key == 'd') {
+        else if (key == 'd')
+        {
             angle -= 10;
         }
     }
@@ -148,17 +154,20 @@ int main(int argc, const char** argv)
     return 0;
 }
 
-Eigen::Matrix4f get_rotation(Vector3f axis, float angle) {
+// 绕任意轴旋转
+Eigen::Matrix4f get_rotation(Vector3f axis, float angle)
+{
     double theta = angle / 180 * MY_PI;
     Eigen::Matrix4f I, N, Rod;
     Eigen::Vector4f axi;
     Eigen::Matrix4f res;
     axi << axis.x(), axis.y(), axis.z(), 0;
     I.Identity();
-    N <<    0, -axis.z(), axis.y(), 0,
-            axis.z(), 0, -axis.x(), 0,
-            -axis.y(), axis.x(), 0, 0,
-            0, 0, 0, 1;
+    N << 0, -axis.z(), axis.y(), 0,
+        axis.z(), 0, -axis.x(), 0,
+        -axis.y(), axis.x(), 0, 0,
+        0, 0, 0, 1;
+    // 罗德里格斯旋转公式
     res = cos(theta) * I + (1 - cos(theta)) * axi * axi.transpose() + sin(theta) * N;
     res(3, 3) = 1;
     return res;
