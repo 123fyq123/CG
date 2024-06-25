@@ -1,0 +1,27 @@
+[
+{
+  "directory": "/usr/games/CG/Hw6/Code/build",
+  "command": "/usr/bin/c++    -g   -std=gnu++17 -o CMakeFiles/RayTracing.dir/main.cpp.o -c /usr/games/CG/Hw6/Code/main.cpp",
+  "file": "/usr/games/CG/Hw6/Code/main.cpp"
+},
+{
+  "directory": "/usr/games/CG/Hw6/Code/build",
+  "command": "/usr/bin/c++    -g   -std=gnu++17 -o CMakeFiles/RayTracing.dir/Vector.cpp.o -c /usr/games/CG/Hw6/Code/Vector.cpp",
+  "file": "/usr/games/CG/Hw6/Code/Vector.cpp"
+},
+{
+  "directory": "/usr/games/CG/Hw6/Code/build",
+  "command": "/usr/bin/c++    -g   -std=gnu++17 -o CMakeFiles/RayTracing.dir/Scene.cpp.o -c /usr/games/CG/Hw6/Code/Scene.cpp",
+  "file": "/usr/games/CG/Hw6/Code/Scene.cpp"
+},
+{
+  "directory": "/usr/games/CG/Hw6/Code/build",
+  "command": "/usr/bin/c++    -g   -std=gnu++17 -o CMakeFiles/RayTracing.dir/BVH.cpp.o -c /usr/games/CG/Hw6/Code/BVH.cpp",
+  "file": "/usr/games/CG/Hw6/Code/BVH.cpp"
+},
+{
+  "directory": "/usr/games/CG/Hw6/Code/build",
+  "command": "/usr/bin/c++    -g   -std=gnu++17 -o CMakeFiles/RayTracing.dir/Renderer.cpp.o -c /usr/games/CG/Hw6/Code/Renderer.cpp",
+  "file": "/usr/games/CG/Hw6/Code/Renderer.cpp"
+}
+]
